@@ -12,7 +12,7 @@
       <canvas id="unity-canvas" width=720 height=1280 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
+        <div id="unity-progress -bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
@@ -50,6 +50,27 @@
         }
         updateBannerVisibility();
       }
+
+      //ウインドウサイズに合わせキャンバスサイズを変更
+        function fitWindowCanvasSize() {
+
+          var winHeight = window.innerHeight;
+          const isViewUnderBar = true;  //falseにすると下部のバーが画面外に表示
+          if (isViewUnderBar) {
+            const barHeight = 18 * 2;            //下部のバーサイズ
+            const barHeightMargin = 10 * 2;      //下部の追加余白サイズ
+            winHeight = winHeight - barHeight - barHeightMargin;
+          }
+          const winWidth = window.innerWidth;
+          const appWidth = "720";
+          const appHeight = "1280";
+          const scale = Math.min((winWidth / appWidth), (winHeight / appHeight));
+          const fixWidth = (appWidth * scale);
+          const fixHeight = (appHeight * scale);
+
+          canvas.style.width = fixWidth + 'px';
+          canvas.style.height = fixHeight + 'px';
+        }
 
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/test_witch.loader.js";
@@ -104,8 +125,7 @@
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "720px";
-        canvas.style.height = "1280px";
+         fitWindowCanvasSize();
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
@@ -124,6 +144,7 @@
               }).catch((message) => {
                 alert(message);
               });
+              windowResizeEvent();
             };
 
       document.body.appendChild(script);
